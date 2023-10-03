@@ -31,5 +31,6 @@
     </div>
     <div class="box-footer mt20">
         <button type="submit" class="btn btn-primary">{{ __('Enviar') }}</button>
+        <a class="btn btn-danger" href="{{ route('rooms.index') }}"> {{ __('Cancelar') }}</a>
     </div>
 </div>

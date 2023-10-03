@@ -32,7 +32,11 @@
                             {{ $rent->renters_ine_ocr }}
                         </div>
                         <div class="form-group">
-                            <strong>Semanas pagadas:</strong>
+                            <strong>Rentado por:</strong>
+                            {{ $rent->pay_type }}
+                        </div>
+                        <div class="form-group">
+                            <strong>Número de pagos:</strong>
                             {{ $rent->paid_weeks }}
                         </div>
                         <div class="form-group">
@@ -57,7 +61,7 @@
                                 <strong>Saldo:</strong>
 
                                 <span class="text-danger"> $
-                                    {{ $balance = $rent->room->price * $rent->paid_weeks - $rent->money_deposit }} </span>
+                                    {{ $balance }} </span>
                             </div>
                         </div>
                         <a class="btn btn-sm btn-primary "

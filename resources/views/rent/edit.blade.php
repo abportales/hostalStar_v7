@@ -13,6 +13,9 @@
                 <div class="card card-default">
                     <div class="card-header">
                         <span class="card-title">{{ __('Modificar') }} Renta</span>
+                        <div class="float-right">
+                            <a class="btn btn-primary" href="{{ route('rents.index') }}"> {{ __('Atras') }}</a>
+                        </div>
                     </div>
                     @if ($message = Session::get('danger'))
                         <div class="alert alert-danger">
@@ -27,7 +30,6 @@
                             <div class="box box-info padding-1">
                                 <div class="box-body">
                                     <div class="form-group">
-
                                         {{ Form::label('nombre_del_cuarto') }}
                                         <select name="room_id">
                                             @foreach ($available_rooms as $room)
@@ -42,12 +44,32 @@
                                     @include('rent.form')
 
                                     <div class="form-group">
-                                        {{ Form::label('fecha_de_inicio_([DD-MM-AAAA]_opcional)') }}
-                                        {{ Form::text('start_date', substr($rent->start_date->format('d-m-Y'), 0, 10), [
-                                            'class' => 'form-control' . ($errors->has('start_date') ? ' is-invalid' : ''),
-                                            'placeholder' => 'Fecha de inicio',
-                                            'maxlength' => '10',
+                                        {{ Form::label('Rentado_por') }}
+                                        <select name="pay_type">
+                                            @foreach ($pay_time as $time)
+                                                <option value={{ $time }}
+                                                    {{ $rent->pay_type == $time ? 'selected="selected"' : '' }}>
+                                                    {{ $time }}</option>
+                                            @endforeach
+                                        </select>
+                                        {!! $errors->first('pay_type', '<div class="invalid-feedback">:message</div>') !!}
+                                    </div>
+
+                                    <div class="form-group">
+                                        {{ Form::label('Número de pagos') }}
+                                        {{ Form::text('paid_weeks', $rent->paid_weeks, [
+                                            'required',
+                                            'class' => 'form-control' . ($errors->has('paid_weeks') ? ' is-invalid' : ''),
+                                            'placeholder' => 'Semanas/Quincenas/Meses pagados',
                                         ]) }}
+                                        {!! $errors->first('paid_weeks', '<div class="invalid-feedback">:message</div>') !!}
+                                    </div>
+
+                                    <div class="form-group">
+                                        {{ Form::label('fecha_de_inicio_([DD-MM-AAAA]_opcional)') }}
+
+                                        @include('rent.datepicker_edit')
+
                                         {!! $errors->first('start_date', '<div class="invalid-feedback">:message</div>') !!}
                                     </div>
 

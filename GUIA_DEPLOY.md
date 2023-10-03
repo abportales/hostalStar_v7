@@ -6,6 +6,7 @@
 - ahora solo resta:
 >   npm run production
 
+
 - subir todos los archivos vía ftp con filezilla a una carpeta llamada laravel dentro de la carpeta
 > htdocs
 - y en la raiz de esta carpeta subir la carpeta public (se genero con el npm run)
@@ -22,3 +23,14 @@ DB_PASSWORD=p4YHLMWbHUiQOBI
 - como no se puede hacer un migrate se exporta la base de datos ya con las migraciones
 >   nos vamos a phpmyadmin, en la base de datos, la exportamos, 
 >   ahora vamos a la base de datos del servidor y la importaoms
+
+## Cuando ejecutamos en local 
+>   npm run development
+
+## No funciona el comando migrate desde route
+- entramos a sql directo y agregamos la sentencia en crudo
+
+> ALTER TABLE rents ADD COLUMN pay_type varchar(20) null AFTER money_deposit
+
+- tmb podemos agrearle un dato por default, para evitar llenar mas
+> ALTER TABLE rents ADD COLUMN pay_type varchar(20) null default 'semanas' AFTER money_deposit

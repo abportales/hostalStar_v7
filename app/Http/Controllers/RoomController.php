@@ -61,9 +61,9 @@ class RoomController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Room $room)
     {
-        $room = Room::find($id);
+        // $room = Room::find($id);
 
         return view('room.show', compact('room'));
     }
@@ -74,9 +74,9 @@ class RoomController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Room $room)
     {
-        $room = Room::find($id);
+        // $room = Room::find($id);
 
         return view('room.edit', compact('room'));
     }
@@ -103,9 +103,9 @@ class RoomController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Room $room)
     {
-        $room = Room::find($id);
+        // $room = Room::find($id);
         $room->rent()->delete();
         $room->delete();
 

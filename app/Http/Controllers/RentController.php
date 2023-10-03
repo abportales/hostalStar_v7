@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
  */
 class RentController extends Controller
 {
+    protected static $pay_time = ['semanas' => 'semanas', 'quincenas' => 'quincenas', 'meses' => 'meses'];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,8 +26,6 @@ class RentController extends Controller
     public function index()
     {
         $rents = Rent::paginate();
-        // $rents = Rent::all();
-        // dd($rents->toArray());
         return view('rent.index', compact('rents'))
             ->with('i', (request()->input('page', 1) - 1) * $rents->perPage());
     }
@@ -39,7 +39,8 @@ class RentController extends Controller
     {
         $rent = new Rent();
         $available_rooms = Room::getAvailableRoomsForCreate();
-        return view('rent.create', compact('rent', 'available_rooms'));
+        $pay_time = self::$pay_time;
+        return view('rent.create', compact('rent', 'available_rooms', 'pay_time'));
     }
 
     /**
@@ -51,11 +52,12 @@ class RentController extends Controller
     public function store(Request $request)
     {
         request()->validate(Rent::$rules);
-        // $rent = Rent::create($request->all());
-        $rent = Rent::createModel($request);
 
-        return redirect()->route('rents.index')
-            ->with('success', 'Renta creada');
+        if (Rent::createModel($request)) {
+            return redirect()->route('rents.index')->with('success', 'Renta creada');
+        } else {
+            return redirect()->route('rents.index')->with('danger', 'Ocurrio un error con las fechas');
+        }
     }
 
     /**
@@ -64,11 +66,14 @@ class RentController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    // public function show($id)
+    public function show(Rent $rent)
     {
-        $rent = Rent::find($id);
-
-        return view('rent.show', compact('rent'));
+        $balance = $rent->getBalance();
+        if (is_null($balance)) {
+            return redirect()->route('rents.index')->with('danger', 'Ocurrio un error obteniendo el balance');
+        }
+        return view('rent.show', compact('rent', 'balance'));
     }
 
     /**
@@ -77,12 +82,14 @@ class RentController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    // public function edit($id)
+    public function edit(Rent $rent)
     {
-        $rent = Rent::find($id);
+        // $rent = Rent::find($id);
         $available_rooms = Room::getAvailableRooms($rent->room->name);
+        $pay_time = self::$pay_time;
 
-        return view('rent.edit', compact('rent','available_rooms'));
+        return view('rent.edit', compact('rent', 'available_rooms', 'pay_time'));
     }
 
     /**
@@ -96,10 +103,12 @@ class RentController extends Controller
     {
         request()->validate(Rent::$rules);
 
-        $rent->updateModel($request);
+        if($rent->updateModel($request)){
+            return redirect()->route('rents.index')->with('success', 'Renta modificada');
+        }else{
+            return redirect()->route('rents.index')->with('danger', 'Renta no modificada');
+        }
 
-        return redirect()->route('rents.index')
-            ->with('success', 'Renta modificada');
     }
 
     /**
@@ -107,11 +116,9 @@ class RentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Rent $rent)
     {
-        Rent::destroyModel($id);
-
-        return redirect()->route('rents.index')
-            ->with('success', 'Renta borrada');
+        $rent->destroyModel();
+        return redirect()->route('rents.index')->with('success', 'Renta borrada');
     }
 }

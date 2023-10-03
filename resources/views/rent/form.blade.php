@@ -23,12 +23,5 @@
     ]) }}
     {!! $errors->first('money_deposit', '<div class="invalid-feedback">:message</div>') !!}
 </div>
-<div class="form-group">
-    {{ Form::label('semanas_pagadas') }}
-    {{ Form::text('paid_weeks', $rent->paid_weeks, [
-        'required',
-        'class' => 'form-control' . ($errors->has('paid_weeks') ? ' is-invalid' : ''),
-        'placeholder' => 'Semanas pagadas',
-    ]) }}
-    {!! $errors->first('paid_weeks', '<div class="invalid-feedback">:message</div>') !!}
-</div>
+
+

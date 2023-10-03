@@ -52,7 +52,7 @@
                                                     <a class="btn btn-sm btn-primary "
                                                         href="{{ route('rooms.show', $room->id) }}"><i
                                                             class="fa fa-fw fa-eye"></i> {{ __('Ver') }}</a>
-                                                    <a class="btn btn-sm btn-success"
+                                                    <a class="btn btn-sm btn-success my-1"
                                                         href="{{ route('rooms.edit', $room->id) }}"><i
                                                             class="fa fa-fw fa-edit"></i> {{ __('Modificar') }}</a>
                                                     @csrf

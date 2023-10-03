@@ -27,6 +27,10 @@
                         <div class="alert alert-success">
                             <p>{{ $message }}</p>
                         </div>
+                    @elseif ($message = Session::get('danger'))
+                        <div class="alert alert-danger">
+                            <p>{{ $message }}</p>
+                        </div>
                     @endif
 
                     <div class="card-body">
@@ -38,6 +42,7 @@
                                         <th>Nombre del cuarto</th>
                                         <th>Nombre de la inquilina</th>
                                         <th>Depósito</th>
+                                        <th>Rentado por</th>
                                         <th>Fecha de inicio</th>
                                         <th>Fecha de termino</th>
                                         <th></th>
@@ -49,14 +54,15 @@
                                             <td>{{ $rent->room->name }}</td>
                                             <td>{{ $rent->renters_name }}</td>
                                             <td>${{ $rent->money_deposit }}</td>
+                                            <td>{{ $rent->pay_type }}({{$rent->paid_weeks}})</td>
                                             <td>{{ $rent->start_date->isoFormat('dddd, D MMMM Y') }}</td>
                                             <td>{{ $rent->end_date->isoFormat('dddd, D MMMM Y') }}</td>
                                             <td>
                                                 <form action="{{ route('rents.destroy', $rent->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary "
+                                                    <a class="btn btn-sm btn-primary"
                                                         href="{{ route('rents.show', $rent->id) }}"><i
                                                             class="fa fa-fw fa-eye"></i> {{ __('Ver') }}</a>
-                                                    <a class="btn btn-sm btn-success"
+                                                    <a class="btn btn-sm btn-success my-1"
                                                         href="{{ route('rents.edit', $rent->id) }}"><i
                                                             class="fa fa-fw fa-edit"></i> {{ __('Modificar') }}</a>
                                                     @csrf
